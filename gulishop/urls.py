@@ -26,5 +26,5 @@ urlpatterns = [
     url(r'^ueditor/', include('DjangoUeditor.urls')),
 
     url(r'^goods/$', GoodsView.as_view()),
-    url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^api-auth/', include('rest_framework.urls')),  # browser api 的登陆/退出
 ]

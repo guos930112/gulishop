@@ -7,11 +7,18 @@
 
 """
 from rest_framework import serializers
+from .models import Goods
 
 
-class GoodsSerializer(serializers.Serializer):
-    name = serializers.CharField(required=True, max_length=30, min_length=3, help_text='名字验证')
-    goods_front_image = serializers.IntegerField(required=True)
-    shop_price = serializers.FloatField(required=True)
-    add_time = serializers.DateTimeField(required=True)
+# class GoodsSerializer(serializers.Serializer):
+#     # 这里是为了序列化models 的每一个字段，必须保持一致  可以一个一个的序列话
+#     name = serializers.CharField(required=True, max_length=30, min_length=3, help_text='名字验证')
+#     goods_front_image = serializers.ImageField(required=True)
+#     shop_price = serializers.FloatField(required=True)
+#     add_time = serializers.DateTimeField(required=True)
 
+class GoodsSerializer(serializers.ModelSerializer):  # 最后我们用的都是这个方法
+    class Meta:
+        model = Goods
+        # fields = ['name', 'add_time']  # 可以选择要序列化的字段
+        fields = '__all__'  # 序列化所有字段
