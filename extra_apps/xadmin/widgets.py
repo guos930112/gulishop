@@ -14,7 +14,9 @@ from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from django.utils.translation import ugettext as _
 
-from .util import vendor, DJANGO_11
+from .util import vendor
+
+DJANGO_11 = True
 
 
 class AdminDateWidget(forms.DateInput):
@@ -29,8 +31,8 @@ class AdminDateWidget(forms.DateInput):
             final_attrs.update(attrs)
         super(AdminDateWidget, self).__init__(attrs=final_attrs, format=format)
 
-    def render(self, name, value, attrs=None):
-        input_html = super(AdminDateWidget, self).render(name, value, attrs)
+    def render(self, name, value, attrs=None, renderer=None):
+        input_html = super(AdminDateWidget, self).render(name, value, attrs, renderer)
         return mark_safe('<div class="input-group date bootstrap-datepicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>%s'
                          '<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div>' % (input_html, _(u'Today')))
 
@@ -47,8 +49,8 @@ class AdminTimeWidget(forms.TimeInput):
             final_attrs.update(attrs)
         super(AdminTimeWidget, self).__init__(attrs=final_attrs, format=format)
 
-    def render(self, name, value, attrs=None):
-        input_html = super(AdminTimeWidget, self).render(name, value, attrs)
+    def render(self, name, value, attrs=None, renderer=None):
+        input_html = super(AdminTimeWidget, self).render(name, value, attrs, renderer)
         return mark_safe('<div class="input-group time bootstrap-clockpicker"><span class="input-group-addon"><i class="fa fa-clock-o">'
                          '</i></span>%s<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div>' % (input_html, _(u'Now')))
 
@@ -71,17 +73,13 @@ class AdminSplitDateTime(forms.SplitDateTimeWidget):
         # we want to define widgets.
         forms.MultiWidget.__init__(self, widgets, attrs)
 
-    def render(self, name, value, attrs=None):
-        if DJANGO_11:
-            input_html = [ht for ht in super(AdminSplitDateTime, self).render(name, value, attrs).replace(
-                '/><input', '/>\n<input').split('\n') if ht != '']
-            # return input_html
-            return mark_safe('<div class="datetime clearfix"><div class="input-group date bootstrap-datepicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>%s'
-                             '<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div>'
-                             '<div class="input-group time bootstrap-clockpicker"><span class="input-group-addon"><i class="fa fa-clock-o">'
-                             '</i></span>%s<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div></div>' % (input_html[0], _(u'Today'), input_html[1], _(u'Now')))
-        else:
-            return super(AdminSplitDateTime, self).render(name, value, attrs)
+    def render(self, name, value, attrs=None, renderer=None):
+        input_html = [ht for ht in super(AdminSplitDateTime, self).render(name, value, attrs, renderer).replace('><input', '>\n<input').split('\n') if ht != '']
+        # return input_html
+        return mark_safe('<div class="datetime clearfix"><div class="input-group date bootstrap-datepicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>%s'
+                         '<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div>'
+                         '<div class="input-group time bootstrap-clockpicker"><span class="input-group-addon"><i class="fa fa-clock-o">'
+                         '</i></span>%s<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div></div>' % (input_html[0], _(u'Today'), input_html[1], _(u'Now')))
 
     def format_output(self, rendered_widgets):
         return mark_safe(u'<div class="datetime clearfix">%s%s</div>' %
@@ -151,6 +149,7 @@ class AdminCheckboxSelect(forms.CheckboxSelectMultiple):
             option_value = force_text(option_value)
             rendered_cb = cb.render(name, option_value)
             option_label = conditional_escape(force_text(option_label))
+            final_attrs['inline'] = True if self.attrs['inline'] else False
 
             if final_attrs.get('inline', False):
                 output.append(u'<label%s class="checkbox-inline">%s %s</label>' % (label_for, rendered_cb, option_label))

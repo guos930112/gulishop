@@ -31,8 +31,10 @@ class DeleteAdminView(ModelAdminView):
 
         # Populate deleted_objects, a data structure of all related objects that
         # will also be deleted.
+
         (self.deleted_objects, model_count, self.perms_needed, self.protected) = get_deleted_objects(
             [self.obj], self.opts, self.request.user, self.admin_site, using)
+
 
     @csrf_protect_m
     @filter_hook

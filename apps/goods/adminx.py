@@ -41,6 +41,10 @@ class GoodsAdmin(object):
     """
     list_display = ['category', 'name', 'goods_sn', 'goods_brief', 'click_num', 'fav_num', 'is_hot', 'add_time']
     style_fields = {'desc': 'ueditor'}
+    search_fields = ['name', ]
+    list_editable = ["is_hot", ]
+    list_filter = ["name", "click_num", "sold_num", "fav_num", "goods_num", "market_price",
+                   "shop_price", "is_new", "is_hot", "add_time"]
 
 
 class CategoryBrandAdmin(object):
@@ -64,10 +68,18 @@ class BannerAdmin(object):
     list_display = ['goods', 'image', 'index', 'add_time']
 
 
+class HotSearchWordsAdmin(object):
+    """
+    热搜词
+    """
+    list_display = ['keywords', 'index', 'add_time']
+
+
 xadmin.site.register(GoodsCategory, GoodsCategoryAdmin)
 xadmin.site.register(Goods, GoodsAdmin)
 xadmin.site.register(CategoryBrand, CategoryBrandAdmin)
 xadmin.site.register(GoodsImage, GoodsImageAdmin)
 xadmin.site.register(Banner, BannerAdmin)
+xadmin.site.register(HotSearchWords, HotSearchWordsAdmin)
 xadmin.site.register(views.BaseAdminView, BaseXadminSetting)
 xadmin.site.register(views.CommAdminView, CommXadminSetting)

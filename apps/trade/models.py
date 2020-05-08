@@ -11,8 +11,8 @@ class ShopCart(models.Model):
     '''
         购物车： 谁买谁 买了几件
     '''
-    user = models.ForeignKey(UserProfile, verbose_name='所属用户')
-    goods = models.ForeignKey(Goods, verbose_name='所属商品')
+    user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, verbose_name='所属商品', on_delete=models.CASCADE)
     nums = models.IntegerField(verbose_name='购买数量')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
 
@@ -36,7 +36,7 @@ class OrderInfo(models.Model):
         ("TRADE_FINSHED", "交易结束"),
     )
     # 第一部分，订单最基本的部分
-    user = models.ForeignKey(UserProfile, verbose_name='所属用户')
+    user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
     order_sn = models.CharField(max_length=50, verbose_name='订单唯一编号', unique=True)
     order_amount = models.FloatField(verbose_name='订单总价')
     order_message = models.CharField(max_length=300, verbose_name='订单留言', null=True, blank=True)
@@ -68,8 +68,8 @@ class OrderGoods(models.Model):
     """
         订单商品表
     """
-    order = models.ForeignKey(OrderInfo, verbose_name="所属订单")
-    goods = models.ForeignKey(Goods, verbose_name="所属商品")
+    order = models.ForeignKey(OrderInfo, verbose_name="所属订单", on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, verbose_name="所属商品", on_delete=models.CASCADE)
     nums = models.IntegerField(verbose_name="商品数量")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 

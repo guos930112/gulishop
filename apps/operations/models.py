@@ -10,8 +10,8 @@ class UserFav(models.Model):
     """
         用户收藏表
     """
-    user = models.ForeignKey(UserProfile, verbose_name='所属用户')
-    goods = models.ForeignKey(Goods, verbose_name='所属商品')
+    user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, verbose_name='所属商品', on_delete=models.CASCADE)
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
 
     def __str__(self):
@@ -34,7 +34,7 @@ class UserLeavingMessage(models.Model):
         (5, "求购"),
 
     )
-    user = models.ForeignKey(UserProfile, verbose_name='所属用户')
+    user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
     msg_type = models.IntegerField(choices=MSG_TYPE, default=1, verbose_name='留言类型')
     subject = models.CharField(max_length=30, verbose_name='留言主题')
     message = models.CharField(max_length=300, verbose_name='留言内容')
@@ -53,7 +53,7 @@ class UserAddress(models.Model):
     """
         用户收货地址信息表
     """
-    user = models.ForeignKey(UserProfile, verbose_name='所属用户')
+    user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
     province = models.CharField(max_length=50, verbose_name='省')
     city = models.CharField(max_length=50, verbose_name='市')
     district = models.CharField(max_length=50, verbose_name='区')
