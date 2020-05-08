@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from .serializers import GoodsSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import generics, mixins, pagination
+from rest_framework import generics, mixins, pagination, filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import GoodsFilter
 
@@ -66,16 +66,29 @@ class GoodsPagination(pagination.PageNumberPagination):
     page_size_query_param = 'page_size'  # 允许路径传参 即允许修改每页显示的数量
 
 
-class GoodsView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):  # 只需配置
+# class GoodsView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):  # 只需配置
+#     queryset = Goods.objects.all()
+#     serializer_class = GoodsSerializer
+#     pagination_class = GoodsPagination
+#     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)  # 配置过滤器
+#     # filter_fields = ('name', )   # 根据哪个字段查询 达不到 模糊/区间 需要自定义
+#     filter_class = GoodsFilter
+#     search_fields = ('name', 'desc', 'goods_brief')
+#     ordering_fields = ('shop_price', 'market_price')
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)  # 把过滤/分页全都写好 只需要配置相关过滤器
+#
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)  # 创建一个对象，即post请求
+
+
+class GoodsViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):  # 只需配置
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
     pagination_class = GoodsPagination
-    filter_backends = (DjangoFilterBackend, )  # 配置过滤器
-    # filter_fields = ('name', )   # 根据哪个字段查询 达不到 模糊/区间 需要自定义
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)  # 配置过滤器
     filter_class = GoodsFilter
+    search_fields = ('name', 'desc', 'goods_brief')
+    ordering_fields = ('shop_price', 'market_price')
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)  # 把过滤/分页全都写好 只需要配置相关过滤器
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)  # 创建一个对象，即post请求
