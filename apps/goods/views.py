@@ -1,13 +1,13 @@
 from django.shortcuts import render, HttpResponse
 from django.views import View
-from .models import Goods
+from .models import Goods, GoodsCategory
 import json
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.core.paginator import Paginator
 from rest_framework.views import APIView
-from .serializers import GoodsSerializer
+from .serializers import GoodsSerializer, CategorySerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics, mixins, pagination, filters, viewsets
@@ -60,7 +60,7 @@ from .filters import GoodsFilter
 
 # 自定义分页类
 class GoodsPagination(pagination.PageNumberPagination):
-    page_size = 10
+    page_size = 12
     max_page_size = 100
     page_query_param = 'pa'  # 路径参数
     page_size_query_param = 'page_size'  # 允许路径传参 即允许修改每页显示的数量
@@ -84,6 +84,9 @@ class GoodsPagination(pagination.PageNumberPagination):
 
 
 class GoodsViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):  # 只需配置
+    """
+        商品列表接口
+    """
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
     pagination_class = GoodsPagination
@@ -92,3 +95,10 @@ class GoodsViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
     search_fields = ('name', 'desc', 'goods_brief')
     ordering_fields = ('shop_price', 'market_price')
 
+
+class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    # queryset = GoodsCategory.objects.all()
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):  # 这个self的作用目的是要拿到 登陆的用户
+        return GoodsCategory.objects.filter(category_type=1)

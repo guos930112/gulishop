@@ -7,7 +7,7 @@
 
 """
 from rest_framework import serializers
-from .models import Goods
+from .models import Goods, GoodsCategory
 
 
 # class GoodsSerializer(serializers.Serializer):
@@ -22,3 +22,28 @@ class GoodsSerializer(serializers.ModelSerializer):  # 最后我们用的都是�
         model = Goods
         # fields = ['name', 'add_time']  # 可以选择要序列化的字段
         fields = '__all__'  # 序列化所有字段
+
+
+class CategorySerializer3(serializers.ModelSerializer):  # 商品类别过滤器类
+    # related_name 很重要
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
+
+
+class CategorySerializer2(serializers.ModelSerializer):  # 商品类别过滤器类
+    # related_name 很重要
+    sub_cat = CategorySerializer3(many=True)
+
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
+
+
+class CategorySerializer(serializers.ModelSerializer):  # 商品类别过滤器类
+    # related_name 很重要
+    sub_cat = CategorySerializer2(many=True)  # 序列化的嵌套
+
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
