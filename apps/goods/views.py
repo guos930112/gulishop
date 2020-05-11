@@ -62,7 +62,7 @@ from .filters import GoodsFilter
 class GoodsPagination(pagination.PageNumberPagination):
     page_size = 12
     max_page_size = 100
-    page_query_param = 'pa'  # 路径参数
+    page_query_param = 'page'  # 路径参数
     page_size_query_param = 'page_size'  # 允许路径传参 即允许修改每页显示的数量
 
 
@@ -85,7 +85,7 @@ class GoodsPagination(pagination.PageNumberPagination):
 
 class GoodsViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):  # 只需配置
     """
-        商品列表接口
+        商品列表接口 带过滤/搜索/分页
     """
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer

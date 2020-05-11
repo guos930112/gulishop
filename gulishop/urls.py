@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from rest_framework.authtoken import views
+from rest_framework_jwt.views import obtain_jwt_token
 import xadmin
 
 from django.views.static import serve
@@ -34,5 +36,10 @@ urlpatterns = [
     # url(r'^goods/$', GoodsView.as_view()),
     # url(r'^goods/$', GoodsView.as_view({'get': 'list'})),
     url(r'^api-auth/', include('rest_framework.urls')),  # browser api 的登陆/退出
-    url(r'', include(router.urls))
+    url(r'', include(router.urls)),
+    # # 这是token 登陆-认证方式
+    # url(r'^login/', views.obtain_auth_token),  # 这里已经把login的post请求给我们做了
+    # 这是JWT Token 登陆-认证方式
+    url(r'^login/', obtain_jwt_token),
+
 ]
