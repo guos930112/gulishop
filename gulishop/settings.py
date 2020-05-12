@@ -157,3 +157,17 @@ REST_FRAMEWORK = {
 
 # 解决跨越问题
 CORS_ORIGIN_ALLOW_ALL = True
+
+import datetime
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),  # jwt 过期时间
+}
+
+# 手机验证 re
+MOBILE_RE = '^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$'
+SEND_INTERVAL_TIMES = 60
+# 云片网 apikey
+YUNPIAN_KEY = '94e3cafc4543943d7c4de9a2fd687a5f'
+
+

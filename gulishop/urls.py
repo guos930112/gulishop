@@ -22,11 +22,13 @@ from django.views.static import serve
 from gulishop.settings import MEDIA_ROOT
 # from goods.views import GoodsView
 from goods.views import GoodsViewSet, CategoryViewSet
+from users.views import VerifyCodeViewSet
 
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'goods', GoodsViewSet, basename='goods')   # 这里就是接口定义的位置
 router.register(r'categorys', CategoryViewSet, basename='categorys')
+router.register(r'code', VerifyCodeViewSet, basename='code')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
