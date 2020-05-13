@@ -18,6 +18,7 @@ class UserFav(models.Model):
         return self.goods.name
 
     class Meta:
+        unique_together = ('user', 'goods')  # 联合唯一 防止一个用户对同一个商品重复收藏
         verbose_name = '用户收藏信息'
         verbose_name_plural = verbose_name
 

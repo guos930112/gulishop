@@ -83,9 +83,9 @@ class GoodsPagination(pagination.PageNumberPagination):
 #         return self.create(request, *args, **kwargs)  # 创建一个对象，即post请求
 
 
-class GoodsViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):  # 只需配置
+class GoodsViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):  # 只需配置
     """
-        商品列表接口 带过滤/搜索/分页
+        商品列表接口 带过滤/搜索/分页  以及单个商品即详情
     """
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer

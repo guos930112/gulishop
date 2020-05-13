@@ -7,7 +7,7 @@
 
 """
 from rest_framework import serializers
-from .models import Goods, GoodsCategory
+from .models import Goods, GoodsCategory, GoodsImage
 
 
 # class GoodsSerializer(serializers.Serializer):
@@ -17,7 +17,15 @@ from .models import Goods, GoodsCategory
 #     shop_price = serializers.FloatField(required=True)
 #     add_time = serializers.DateTimeField(required=True)
 
+class GoodsImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GoodsImage
+        fields = '__all__'
+
+
 class GoodsSerializer(serializers.ModelSerializer):  # 最后我们用的都是这个方法
+    images = GoodsImageSerializer(many=True)
+
     class Meta:
         model = Goods
         # fields = ['name', 'add_time']  # 可以选择要序列化的字段

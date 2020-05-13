@@ -28,7 +28,7 @@ class VerifyCodeSerializer(serializers.ModelSerializer):
         ver_list = VerifyCode.objects.filter(mobile=mobile).order_by('-add_time')
         if ver_list:
             ver_code = ver_list[0]
-            if (datetime.now() - ver_code.add_time) <= SEND_INTERVAL_TIMES:
+            if (datetime.now() - ver_code.add_time).seconds <= SEND_INTERVAL_TIMES:
                 raise serializers.ValidationError('send times is frequently')
             else:
                 ver_code.delete()
@@ -43,7 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, max_length=30, min_length=11,
                                      validators=[UniqueValidator(queryset=UserProfile.objects.all())])
     password = serializers.CharField(required=True, max_length=20, min_length=6,
-                                     write_only=True)  # write_only只能写不能读，即只能写进来，不能返回前端
+                                     write_only=True, style={'input_type': 'password'})
+    # write_only只能写不能读，即只能写进来，不能返回前端
     code = serializers.CharField(required=True, max_length=6, min_length=6, write_only=True)
 
     def validate_code(self, code):

@@ -25,4 +25,4 @@ class GoodsFilter(filters.FilterSet):
     class Meta:
         model = Goods
         # fields = ['minprice', 'maxprice', 'name']
-        fields = ['pricemin', 'pricemax']  # 参数需要和前端传参对应上
+        fields = ['pricemin', 'pricemax', 'is_hot']  # 参数需要和前端传参对应上
