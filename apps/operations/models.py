@@ -36,7 +36,8 @@ class UserLeavingMessage(models.Model):
 
     )
     user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
-    msg_type = models.IntegerField(choices=MSG_TYPE, default=1, verbose_name='留言类型')
+    # 因为前端是message_type 修改 不然提交类型都是 1
+    message_type = models.IntegerField(choices=MSG_TYPE, default=1, verbose_name='留言类型')
     subject = models.CharField(max_length=30, verbose_name='留言主题')
     message = models.CharField(max_length=300, verbose_name='留言内容')
     file = models.FileField(upload_to='users/files', max_length=200, verbose_name='留言文件')
@@ -58,13 +59,13 @@ class UserAddress(models.Model):
     province = models.CharField(max_length=50, verbose_name='省')
     city = models.CharField(max_length=50, verbose_name='市')
     district = models.CharField(max_length=50, verbose_name='区')
-    signing_name = models.CharField(max_length=20, verbose_name="收货人")
-    signing_mobile = models.CharField(max_length=11, verbose_name="收货电话")
+    signer_name = models.CharField(max_length=20, verbose_name="收货人")
+    signer_mobile = models.CharField(max_length=11, verbose_name="收货电话")
     address = models.CharField(max_length=300, verbose_name="收货地址")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     def __str__(self):
-        return self.signing_name
+        return self.signer_name
 
     class Meta:
         verbose_name = '用户收货地址信息'

@@ -38,19 +38,19 @@ class OrderInfo(models.Model):
     # 第一部分，订单最基本的部分
     user = models.ForeignKey(UserProfile, verbose_name='所属用户', on_delete=models.CASCADE)
     order_sn = models.CharField(max_length=50, verbose_name='订单唯一编号', unique=True)
-    order_amount = models.FloatField(verbose_name='订单总价')
+    order_mount = models.FloatField(verbose_name='订单总价')
     order_message = models.CharField(max_length=300, verbose_name='订单留言', null=True, blank=True)
 
     # 第二部分,订单支付部分
     trade_no = models.CharField(max_length=50, verbose_name='交易流水号', unique=True, null=True, blank=True,
                                 help_text='支付宝支付成功会返回流水号')  # 支付成功后支付宝返回的
-    trade_status = models.CharField(max_length=20, verbose_name='订单状态', choices=ORDER_STATUS, default='PAYING')
+    pay_status = models.CharField(max_length=20, verbose_name='订单状态', choices=ORDER_STATUS, default='PAYING')
     pay_time = models.DateTimeField(verbose_name='支付时间', null=True, blank=True)
 
     # 第三部分，订单收货人信息
-    signing_name = models.CharField(max_length=30, verbose_name="签收人")
+    signer_name = models.CharField(max_length=30, verbose_name="签收人")
     # 签收电话
-    signing_mobile = models.CharField(max_length=11, verbose_name="联系电话")
+    signer_mobile = models.CharField(max_length=11, verbose_name="联系电话")
     # 签收地址
     address = models.CharField(max_length=200, verbose_name="收货地址")
 
@@ -68,9 +68,9 @@ class OrderGoods(models.Model):
     """
         订单商品表
     """
-    order = models.ForeignKey(OrderInfo, verbose_name="所属订单", on_delete=models.CASCADE)
+    order = models.ForeignKey(OrderInfo, verbose_name="所属订单", related_name='goods', on_delete=models.CASCADE)
     goods = models.ForeignKey(Goods, verbose_name="所属商品", on_delete=models.CASCADE)
-    nums = models.IntegerField(verbose_name="商品数量")
+    goods_num = models.IntegerField(verbose_name="商品数量")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     def __str__(self):

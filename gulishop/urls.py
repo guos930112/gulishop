@@ -23,7 +23,8 @@ from gulishop.settings import MEDIA_ROOT
 # from goods.views import GoodsView
 from goods.views import GoodsViewSet, CategoryViewSet
 from users.views import VerifyCodeViewSet, UserViewSet
-from operations.views import UserFavViewSet
+from operations.views import UserFavViewSet, UserLeavingMessageViewSet, UserAddressViewSet
+from trade.views import ShopCartViewSet, OrderInfoViewSet
 
 from rest_framework import routers
 router = routers.DefaultRouter()
@@ -32,6 +33,10 @@ router.register(r'categorys', CategoryViewSet, basename='categorys')
 router.register(r'code', VerifyCodeViewSet, basename='code')
 router.register(r'users', UserViewSet, basename='users')
 router.register(r'userfavs', UserFavViewSet, basename='userfavs')
+router.register(r'messages', UserLeavingMessageViewSet, basename='messages')
+router.register(r'address', UserAddressViewSet, basename='address')
+router.register(r'shopcarts', ShopCartViewSet, basename='shopcarts')
+router.register(r'orders', OrderInfoViewSet, basename='orders')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

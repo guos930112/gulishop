@@ -147,12 +147,12 @@ REST_FRAMEWORK = {
     #   # paginator global
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 10  # 每页多少条数据
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',  # 浏览器最基本的
-        'rest_framework.authentication.SessionAuthentication',  # browser api 测试工具用的
-        # 'rest_framework.authentication.TokenAuthentication',  # 当用户点击登陆后 后端把token返回后 前端每次带token访问资源时，我们的认证操作都是这里配置起的作用 需要看一下源码
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ]
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',  # 浏览器最基本的
+    #     'rest_framework.authentication.SessionAuthentication',  # browser api 测试工具用的
+    #     # 'rest_framework.authentication.TokenAuthentication',  # 当用户点击登陆后 后端把token返回后 前端每次带token访问资源时，我们的认证操作都是这里配置起的作用 需要看一下源码
+    #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    # ]
 }
 
 # 解决跨越问题

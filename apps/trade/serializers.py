@@ -1,58 +1,74 @@
 # -*- coding: utf-8 -*-
 """
-@Time   ： 2020/5/13 8:33 下午
+@Time   ： 2020/5/16 3:08 下午
 @Author ： guos
 @File   ：serializers.py
 @IDE    ：PyCharm
 
 """
 from rest_framework import serializers
-from .models import UserFav, UserLeavingMessage, UserAddress
+from .models import ShopCart, OrderInfo, OrderGoods
 from goods.serializers import GoodsSerializer
 
 
-class UserFavSerializer(serializers.ModelSerializer):
+class ShopCartSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
     add_time = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
-        model = UserFav
+        model = ShopCart
         fields = '__all__'
 
 
-class UserFavListSerializer(serializers.ModelSerializer):
+class ShopCartListSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
     add_time = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
-    # 这里goods 是我们userfav 表里外键字段， 它对应了一个商品，所以序列化我们many=False
-    # django 本身的 serializer 序列化器没有办法直接序列化外键
     goods = GoodsSerializer(many=False)
 
     class Meta:
-        model = UserFav
+        model = ShopCart
         fields = '__all__'
 
 
-class UserLeavingMessageSerializer(serializers.ModelSerializer):
+class OrderInfoSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
     add_time = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    order_sn = serializers.CharField(read_only=True)
+    trade_no = serializers.CharField(read_only=True)
+    pay_status = serializers.CharField(read_only=True)
+    pay_time = serializers.DateTimeField(read_only=True)
 
     class Meta:
-        model = UserLeavingMessage
+        model = OrderInfo
         fields = '__all__'
 
 
-class UserAddressSerializer(serializers.ModelSerializer):
+class OrderGoodsSerializer(serializers.ModelSerializer):
+    goods = GoodsSerializer(many=False)
+
+    class Meta:
+        model = OrderGoods
+        fields = '__all__'
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
     add_time = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    order_sn = serializers.CharField(read_only=True)
+    trade_no = serializers.CharField(read_only=True)
+    pay_status = serializers.CharField(read_only=True)
+    pay_time = serializers.DateTimeField(read_only=True)
+
+    goods = OrderGoodsSerializer(many=True)
 
     class Meta:
-        model = UserAddress
+        model = OrderInfo
         fields = '__all__'
