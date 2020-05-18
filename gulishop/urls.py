@@ -24,9 +24,10 @@ from gulishop.settings import MEDIA_ROOT
 from goods.views import GoodsViewSet, CategoryViewSet
 from users.views import VerifyCodeViewSet, UserViewSet
 from operations.views import UserFavViewSet, UserLeavingMessageViewSet, UserAddressViewSet
-from trade.views import ShopCartViewSet, OrderInfoViewSet
+from trade.views import ShopCartViewSet, OrderInfoViewSet, AliPayView
 
 from rest_framework import routers
+from django.views.generic import TemplateView
 router = routers.DefaultRouter()
 router.register(r'goods', GoodsViewSet, basename='goods')   # 这里就是接口定义的位置
 router.register(r'categorys', CategoryViewSet, basename='categorys')
@@ -51,5 +52,7 @@ urlpatterns = [
     # url(r'^login/', views.obtain_auth_token),  # 这里已经把login的post请求给我们做了
     # 这是JWT Token 登陆-认证方式
     url(r'^login/', obtain_jwt_token),
+    url(r'^alipay_return/$', AliPayView.as_view(), name='alipay'),
+    url(r'^index/$', TemplateView.as_view(template_name='index.html'), name='index'),
 
 ]

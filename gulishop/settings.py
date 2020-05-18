@@ -26,7 +26,7 @@ SECRET_KEY = '5rki$ce%8!cdvh1d2#!@vtu+y$xi+ioq^l081@l0j9nlqtgmrs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -170,4 +170,6 @@ SEND_INTERVAL_TIMES = 60
 # 云片网 apikey
 YUNPIAN_KEY = '94e3cafc4543943d7c4de9a2fd687a5f'
 
-
+private_key = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
+ali_key = os.path.join(BASE_DIR, 'apps/trade/keys/ali_pubkey_2048.txt')
+app_id = '2016092500591705'

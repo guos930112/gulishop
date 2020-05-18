@@ -30,7 +30,7 @@ class OrderInfo(models.Model):
     """
     ORDER_STATUS = (
         ("PAYING", "待支付"),
-        ("TRADE_SUCESS", "支付成功"),
+        ("TRADE_SUCCESS", "支付成功"),
         ("TRADE_CLOSE", "支付关闭"),
         ("TRADE_FAIL", "支付失败"),
         ("TRADE_FINSHED", "交易结束"),
