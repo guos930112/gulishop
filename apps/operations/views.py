@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, viewsets, status
+from rest_framework.response import Response
+
 from .models import UserFav, UserLeavingMessage, UserAddress
 from .serializers import UserFavSerializer, UserFavListSerializer, UserLeavingMessageSerializer, UserAddressSerializer
 from rest_framework.authentication import SessionAuthentication
@@ -32,6 +34,44 @@ class UserFavViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.L
         if self.action == 'list':
             return UserFavListSerializer
         return UserFavSerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+            增加收藏
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = self.perform_create(serializer)  # 可以返回一个实例
+        instance.goods.fav_num += 1
+        instance.goods.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        """
+            重写 perform_create 方法
+        :param serializer:
+        :return:
+        """
+        return serializer.save()
+
+    def destroy(self, request, *args, **kwargs):
+        """
+            取消收藏
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        instance = self.get_object()
+        instance.goods.fav_num -= 1
+        instance.goods.save()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserLeavingMessageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
