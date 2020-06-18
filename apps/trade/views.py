@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from datetime import datetime
 import time
 import random
+from django.db import transaction
 
 from gulishop.settings import private_key, ali_key, app_id
 from utils.alipay import AliPay
@@ -101,9 +102,12 @@ class OrderInfoViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
         ret['alipay_url'] = re_url
         return Response(ret)
 
+    @transaction.atomic()
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        # 创建事物的回退点：
+        back_pointer = transaction.savepoint()
         order_sn = self.get_order_sn()
         order = OrderInfo()
         order.user = self.request.user
@@ -121,10 +125,17 @@ class OrderInfoViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
             order_goods.order = order
             order_goods.goods = cart.goods
             order_goods.goods_num = cart.nums
+            if order_goods.goods.goods_num < cart.nums:
+                transaction.savepoint_rollback(back_pointer)
+                return Response({'msg': '库存不足'}, status=status.HTTP_400_BAD_REQUEST)
+            order_goods.goods.goods_num -= cart.nums
+            order_goods.goods.save()
             order_goods.save()
 
         # 清空购物车
         cart_list.delete()
+
+        transaction.savepoint_commit(back_pointer)
 
         # 生成支付订单链接 加入到返回数据中，可以让前端请求支付链接
         # 创建订单的时候，我们需要调用支付宝的接口，生成一个次订单对应的支付链接，然后返回给前端，前端拿到链接 window.location.href=link 去发送支付请求
