@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+import logging
+import logging.handlers
 import os, sys
+from config.db_config import MYSQL_HOST, MYSQL_PORT, MYSQL_PASSWD
+from config.env_config import CUR_ENV, IS_DEBUG, LOG_DIR_OA_SUPPORT_SERVER
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -90,9 +93,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gulishop',
         'USER': 'root',
-        'PASSWORD': 'rootguos',
-        'HOST': 'localhost',
-        'PORT': 3306,
+        'PASSWORD': MYSQL_PASSWD,
+        'HOST': MYSQL_HOST,
+        'PORT': MYSQL_PORT,
 
     }
 }
@@ -173,3 +176,32 @@ YUNPIAN_KEY = '94e3cafc4543943d7c4de9a2fd687a5f'
 private_key = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
 ali_key = os.path.join(BASE_DIR, 'apps/trade/keys/ali_pubkey_2048.txt')
 app_id = '2016092500591705'
+
+
+def log_config(log_dir='./log', filename='log_test.log', is_debug=False):
+    logginglevel = logging.DEBUG if is_debug else logging.INFO
+
+    log_dir = os.path.join(log_dir)
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    log_filename = os.path.join(log_dir, filename)
+
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s: %(message)s')
+    log_FileHandler = logging.handlers.TimedRotatingFileHandler(log_filename,
+                                                                when='D',  # log file rollover every 24 hours
+                                                                interval=1,
+                                                                backupCount=30)
+
+    log_FileHandler.setFormatter(formatter)
+    log_FileHandler.setLevel(logginglevel)
+    logger = logging.getLogger()
+    logger.setLevel(logginglevel)
+    logger.addHandler(log_FileHandler)
+
+
+server_name = 'gulishop'
+log_filename = server_name + '.log'
+log_dir = os.path.join(LOG_DIR_OA_SUPPORT_SERVER, server_name)
+log_config(log_dir=log_dir, filename=log_filename, is_debug=IS_DEBUG)
+logging.info(f'server start in CUR_ENV:{CUR_ENV}')

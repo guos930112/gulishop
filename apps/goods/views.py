@@ -13,6 +13,8 @@ from rest_framework import status
 from rest_framework import generics, mixins, pagination, filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import GoodsFilter
+import logging
+from config.env_config import CUR_ENV
 
 
 # class GoodsView(View):
@@ -94,6 +96,7 @@ class GoodsViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
     filter_class = GoodsFilter
     search_fields = ('name', 'desc', 'goods_brief')
     ordering_fields = ('shop_price', 'market_price')
+    logging.info(f'gulishop goods list view len queryset {len(queryset)} CUR_ENV:{CUR_ENV}')
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -106,6 +109,7 @@ class GoodsViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
 class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     # queryset = GoodsCategory.objects.all()
     serializer_class = CategorySerializer
+    logging.info(f'gulishop categorys list view len queryset CUR_ENV:{CUR_ENV}')
 
     def get_queryset(self):  # 这个self的作用目的是要拿到 登陆的用户
         return GoodsCategory.objects.filter(category_type=1)
