@@ -7,7 +7,7 @@
 
 """
 from rest_framework import serializers
-from .models import Goods, GoodsCategory, GoodsImage
+from .models import Goods, GoodsCategory, GoodsImage, Banner
 
 
 # class GoodsSerializer(serializers.Serializer):
@@ -54,4 +54,11 @@ class CategorySerializer(serializers.ModelSerializer):  # 商品类别过滤器�
 
     class Meta:
         model = GoodsCategory
+        fields = '__all__'
+
+
+class IndexBannerSerializer(serializers.ModelSerializer):
+    # 首页轮播图 序列化器
+    class Meta:
+        model = Banner
         fields = '__all__'

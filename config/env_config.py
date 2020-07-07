@@ -53,6 +53,4 @@ else:
     assert(CUR_ENV or "Must define %s! env" % CUR_ENV)
     exit(1)
 
-LOG_DIR_OA_SUPPORT_SERVER = LOG_DIR
-
-AUTH_CHECK_ENABLE = True
+LOG_DIR_GULISHOP_SERVER = LOG_DIR

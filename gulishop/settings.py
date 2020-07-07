@@ -13,7 +13,7 @@ import logging
 import logging.handlers
 import os, sys
 from config.db_config import MYSQL_HOST, MYSQL_PORT, MYSQL_PASSWD
-from config.env_config import CUR_ENV, IS_DEBUG, LOG_DIR_OA_SUPPORT_SERVER
+from config.env_config import CUR_ENV, IS_DEBUG, LOG_DIR_GULISHOP_SERVER
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -202,6 +202,6 @@ def log_config(log_dir='./log', filename='log_test.log', is_debug=False):
 
 server_name = 'gulishop'
 log_filename = server_name + '.log'
-log_dir = os.path.join(LOG_DIR_OA_SUPPORT_SERVER, server_name)
+log_dir = os.path.join(LOG_DIR_GULISHOP_SERVER, server_name)
 log_config(log_dir=log_dir, filename=log_filename, is_debug=IS_DEBUG)
 logging.info(f'server start in CUR_ENV:{CUR_ENV}')

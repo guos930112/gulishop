@@ -1,13 +1,13 @@
 from django.shortcuts import render, HttpResponse
 from django.views import View
-from .models import Goods, GoodsCategory
+from .models import Goods, GoodsCategory, Banner
 import json
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.core.paginator import Paginator
 from rest_framework.views import APIView
-from .serializers import GoodsSerializer, CategorySerializer
+from .serializers import GoodsSerializer, CategorySerializer, IndexBannerSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics, mixins, pagination, filters, viewsets
@@ -113,3 +113,9 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
 
     def get_queryset(self):  # 这个self的作用目的是要拿到 登陆的用户
         return GoodsCategory.objects.filter(category_type=1)
+
+
+# 首页 轮播图 cbv
+class IndexBannersViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Banner.objects.all().order_by('-index')
+    serializer_class = IndexBannerSerializer

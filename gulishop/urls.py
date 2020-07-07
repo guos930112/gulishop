@@ -21,7 +21,7 @@ import xadmin
 from django.views.static import serve
 from gulishop.settings import MEDIA_ROOT
 # from goods.views import GoodsView
-from goods.views import GoodsViewSet, CategoryViewSet
+from goods.views import GoodsViewSet, CategoryViewSet, IndexBannersViewSet
 from users.views import VerifyCodeViewSet, UserViewSet
 from operations.views import UserFavViewSet, UserLeavingMessageViewSet, UserAddressViewSet
 from trade.views import ShopCartViewSet, OrderInfoViewSet, AliPayView
@@ -38,6 +38,7 @@ router.register(r'messages', UserLeavingMessageViewSet, basename='messages')
 router.register(r'address', UserAddressViewSet, basename='address')
 router.register(r'shopcarts', ShopCartViewSet, basename='shopcarts')
 router.register(r'orders', OrderInfoViewSet, basename='orders')
+router.register(r'banners', IndexBannersViewSet, basename='banners')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

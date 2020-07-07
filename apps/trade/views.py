@@ -128,6 +128,7 @@ class OrderInfoViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
             if order_goods.goods.goods_num < cart.nums:
                 transaction.savepoint_rollback(back_pointer)
                 return Response({'msg': '库存不足'}, status=status.HTTP_400_BAD_REQUEST)
+            # 减库存
             order_goods.goods.goods_num -= cart.nums
             order_goods.goods.save()
             order_goods.save()
@@ -244,4 +245,9 @@ class AliPayView(APIView):
                 order.pay_time = pay_time
                 order.trade_no = trade_no
                 order.save()
+                # 支付成功要把销量加上 主表.字表类名小写.all() 返回的是一个列表
+                order_goods_list = order.goods.all()
+                for order_goods in order_goods_list:
+                    order_goods.goods.sold_num += order_goods.goods_num
+                    order_goods.save()
                 return Response('success')
