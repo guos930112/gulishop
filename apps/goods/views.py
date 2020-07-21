@@ -10,12 +10,13 @@ from rest_framework.views import APIView
 from .serializers import GoodsSerializer, CategorySerializer, IndexBannerSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import generics, mixins, pagination, filters, viewsets
+from rest_framework import generics, mixins, pagination, filters, viewsets, throttling
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import GoodsFilter
 import logging
 from config.env_config import CUR_ENV
-
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from django.core.cache import cache
 
 # class GoodsView(View):
 #     def get(self, request):
@@ -85,7 +86,7 @@ class GoodsPagination(pagination.PageNumberPagination):
 #         return self.create(request, *args, **kwargs)  # 创建一个对象，即post请求
 
 
-class GoodsViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):  # 只需配置
+class GoodsViewSet(CacheResponseMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):  # 只需配置
     """
         商品列表接口 带过滤/搜索/分页  以及单个商品即详情
     """
@@ -94,6 +95,7 @@ class GoodsViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
     pagination_class = GoodsPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)  # 配置过滤器
     filter_class = GoodsFilter
+    throttle_classes = (throttling.AnonRateThrottle, throttling.UserRateThrottle)
     search_fields = ('name', 'desc', 'goods_brief')
     ordering_fields = ('shop_price', 'market_price')
     logging.info(f'gulishop goods list view len queryset {len(queryset)} CUR_ENV:{CUR_ENV}')

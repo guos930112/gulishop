@@ -156,7 +156,25 @@ REST_FRAMEWORK = {
     #     # 'rest_framework.authentication.TokenAuthentication',  # 当用户点击登陆后 后端把token返回后 前端每次带token访问资源时，我们的认证操作都是这里配置起的作用 需要看一下源码
     #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     # ]
+    # 这里的限速是全局的，一般我们用的比较多的是局部的
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/minute',
+        'user': '3/minute'
+    }
 }
+
+# 使用 drf-extensions缓存的过期时间
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15
+}
+
+# 配置缓存的位置
+
+
 
 # 解决跨越问题
 CORS_ORIGIN_ALLOW_ALL = True
